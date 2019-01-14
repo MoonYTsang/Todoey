@@ -10,7 +10,7 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
 
-    let itemArray = ["Find Mary", "Buy apples", "Pay bill"]
+    var itemArray = ["Find Mary", "Buy apples", "Pay bill"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,8 +54,35 @@ class TodoListViewController: UITableViewController {
         //when a row is selected, it is being highlighted in grey color, use tableView.deselectRow method to deselect the row so that the highlight goes away
         tableView.deselectRow(at: indexPath, animated: true)
         
-        
     }
     
+    //MARKS: - ADD NEW IB ACTIONS/OUTLETS
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add new Todoey item", message: "", preferredStyle: .alert)    //Create UIAlertController object
+
+        let addItemAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            print("[Check] Add Item button pressed.")
+            if textField.text != "" {
+                self.itemArray.append(textField.text!)
+                print(self.itemArray)
+                self.tableView.reloadData()
+            }
+
+        }   //Create UIAlertAction object + handler
+
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create an item"
+            textField = alertTextField  //let local var textField reference to alertTextField which is in a narrow scope that not able to be used by the UIAlertAction.
+        }   //Add UITextField to UIAlertController
+
+        alert.addAction(addItemAction)  //Add UIAlertAction to UIAlertController
+        
+        present(alert, animated: true, completion: nil) //UIViewController to display the UIAlertController
+        
+    }
 }
 
