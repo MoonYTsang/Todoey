@@ -60,26 +60,38 @@ class TodoListViewController: UITableViewController {
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
-        var textField = UITextField()
+//        var textField = UITextField()
         
         let alert = UIAlertController(title: "Add new Todoey item", message: "", preferredStyle: .alert)    //Create UIAlertController object
 
         let addItemAction = UIAlertAction(title: "Add Item", style: .default) { (action) in
             print("[Check] Add Item button pressed.")
-            if textField.text != "" {
-                self.itemArray.append(textField.text!)
-                print(self.itemArray)
-                self.tableView.reloadData()
+            
+            if let textFieldArray = alert.textFields {  //optional binding for optional array
+                if let text = textFieldArray[0].text {  //optional binding for optinal string
+                    if text != "" {
+                        self.itemArray.append(text)
+                        self.tableView.reloadData()
+                        print("[Check] Item added to the list.")
+                    }
+                }
             }
+//            if textField.text != "" {
+//                self.itemArray.append(textField.text!)
+//                self.tableView.reloadData()
+//            }
 
         }   //Create UIAlertAction object + handler
 
+        let cancelItemAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create an item"
-            textField = alertTextField  //let local var textField reference to alertTextField which is in a narrow scope that not able to be used by the UIAlertAction.
+//            textField = alertTextField  //let local var textField reference to alertTextField which is in a narrow scope that not able to be used by the UIAlertAction.
         }   //Add UITextField to UIAlertController
 
         alert.addAction(addItemAction)  //Add UIAlertAction to UIAlertController
+        alert.addAction(cancelItemAction)  //Add Cancel button to the alert
         
         present(alert, animated: true, completion: nil) //UIViewController to display the UIAlertController
         
