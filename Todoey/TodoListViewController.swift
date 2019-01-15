@@ -11,10 +11,14 @@ import UIKit
 class TodoListViewController: UITableViewController {
 
     var itemArray = ["Find Mary", "Buy apples", "Pay bill"]
+    let defautls = UserDefaults.standard  //declare a standard UserDefaults
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        if let items = defautls.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        } //get the value of the stored array
     }
 
     //MARK: - TABLEVIEW DATASOURCE METHODS
@@ -73,6 +77,7 @@ class TodoListViewController: UITableViewController {
                         self.itemArray.append(text)
                         self.tableView.reloadData()
                         print("[Check] Item added to the list.")
+                        self.defautls.set(self.itemArray, forKey: "TodoListArray")
                     }
                 }
             }
