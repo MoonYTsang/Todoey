@@ -9,14 +9,28 @@
 import UIKit
 
 class TodoListViewController: UITableViewController {
+    
+    //MARK: - GLOBAL VARIABLES AND CONSTANTS
+    
+    var itemArray = [Item]()
+    let defautls = UserDefaults.standard  //Declare a standard UserDefaults. Note: UserDefaults is only suitable to store small piece of data like user preference, it is not good to store array or dictionaries which might expand to be very large amount data. Also, it do not support class type.
 
-    var itemArray = ["Find Mary", "Buy apples", "Pay bill"]
-    let defautls = UserDefaults.standard  //declare a standard UserDefaults
+    //MARK: - VIEWDIDLOAD
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let items = defautls.array(forKey: "TodoListArray") as? [String] {
+        let item1 = Item()
+        item1.title = "Find Mary"
+        itemArray.append(item1)
+        let item2 = Item()
+        item2.title = "Buy apples"
+        itemArray.append(item2)
+        let item3 = Item()
+        item3.title = "Pay bills"
+        itemArray.append(item3)
+        
+        if let items = defautls.array(forKey: "TodoListArray") as? [Item] {
             itemArray = items
         } //get the value of the stored array
     }
@@ -30,8 +44,13 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoListCell", for: indexPath)
+        let item = itemArray[indexPath.row]
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        cell.textLabel?.text = item.title
+        
+        //Tenary operator ==>
+        // value = condition ? valueIfTrue : valueIfFalse
+        cell.accessoryType = item.done ? .checkmark : .none
         
         return cell
         
@@ -41,13 +60,19 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        print("[Check] Row selected. Text = \(itemArray[indexPath.row])")
+        let item = itemArray[indexPath.row]
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType.rawValue == 0 {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }
+        print("[Check] Row selected. Text = \(item.title)")
+
+        item.done.toggle() // i.e. item.done = !item.done
+
+        tableView.reloadData()
+
+//        if tableView.cellForRow(at: indexPath)?.accessoryType.rawValue == 0 {
+//            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+//        } else {
+//            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+//        }
         //there are 5 values for a cell's accessoryType:
         // 0 - none
         // 1 - disclosureIndicator
@@ -60,7 +85,8 @@ class TodoListViewController: UITableViewController {
         
     }
     
-    //MARKS: - ADD NEW IB ACTIONS/OUTLETS
+    
+    //MARK: - ADD NEW IB ACTIONS AND OUTLETS
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -74,7 +100,9 @@ class TodoListViewController: UITableViewController {
             if let textFieldArray = alert.textFields {  //optional binding for optional array
                 if let text = textFieldArray[0].text {  //optional binding for optinal string
                     if text != "" {
-                        self.itemArray.append(text)
+                        let newItem = Item()
+                        newItem.title = text
+                        self.itemArray.append(newItem)
                         self.tableView.reloadData()
                         print("[Check] Item added to the list.")
                         self.defautls.set(self.itemArray, forKey: "TodoListArray")
