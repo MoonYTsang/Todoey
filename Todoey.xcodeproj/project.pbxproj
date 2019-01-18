@@ -57,6 +57,7 @@
 		787C03D921EF374D0057119E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				78BB81BE21EC90C400FD5D16 /* AppDelegate.swift */,
 				78BB81C021EC90C400FD5D16 /* TodoListViewController.swift */,
 			);
 			name = Controllers;
@@ -65,7 +66,6 @@
 		787C03DA21EF3BEB0057119E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				78BB81BE21EC90C400FD5D16 /* AppDelegate.swift */,
 				78BB81C521EC90C500FD5D16 /* Assets.xcassets */,
 			);
 			name = "Supporting Files";

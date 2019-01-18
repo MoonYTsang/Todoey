@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Item {
+class Item: Codable { //conform to protocol that allow encode this custom object to, or decode from, plist or JSON files.
     var title : String = ""
     var done : Bool = false
 }
